@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"
+    />
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  </head>
+  <body>
+    <table id="example" class="display" style="width:100%">
+      <thead>
+        <tr>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Position</th>
+          <th>Office</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Tiger</td>
+          <td>Nixon</td>
+          <td>System Architect</td>
+          <td>Edinburgh</td>
+          <td>12/01/1994</td>
+        </tr>
+        <tr>
+          <td>Garrett</td>
+          <td>Winters</td>
+          <td>Accountant</td>
+          <td>Tokyo</td>
+          <td>01/01/2001</td>
+        </tr>
+        <tr>
+          <td>Ashton</td>
+          <td>Cox</td>
+          <td>Junior Technical Author</td>
+          <td>San Francisco</td>
+          <td>12/01/1996</td>
+        </tr>
+        <tr>
+          <td>Ashwin</td>
+          <td>Cox</td>
+          <td>Junior Technical Author</td>
+          <td>San Francisco</td>
+          <td>11/01/1996</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <script>
+      $(document).ready(function() {
+        $("#example").DataTable({
+          aoColumnDefs: [
+            {
+              sType: "date",
+              bSortable: true,
+              aTargets: [4]
+            }
+          ]
+        });
+      });
+
+      function toUnixStamp(str) {
+        var s = str.split("/");
+        if (s.length > 1)
+          return (
+            new Date(Date.UTC(s[2], s[0], s[1], 0, 0, 0)).getTime() / 1000.0
+          );
+      }
+
+      jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+        "date-asc": function(a, b) {
+          let dateObjectX = toUnixStamp(a);
+          let dateObjectY = toUnixStamp(b);
+          a = dateObjectX;
+          b = dateObjectY;
+          return a < b ? -1 : a > b ? 1 : 0;
+        },
+        "date-desc": function(a, b) {
+          let dateObjectX = toUnixStamp(a);
+          let dateObjectY = toUnixStamp(b);
+          a = dateObjectX;
+          b = dateObjectY;
+          return a < b ? 1 : a > b ? -1 : 0;
+        }
+      });
+    </script>
+  </body>
+</html>
